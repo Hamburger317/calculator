@@ -2,6 +2,35 @@ from lexer import Category, Token
 from operators import Associativity, Operator
 
 
+_OPERATORS = (Category.OPERATOR, Category.UNARY_OPERATOR)
+
+
+def _higher_priority(operator: Operator, other: Operator) -> bool:
+    return operator.precedence > other.precedence or (
+        operator.precedence == other.precedence
+        and other.associativity == Associativity.LEFT
+    )
+
+
+def _top_is_open_parenthesis(stack):
+    return stack[-1].category == Category.PARENTHESIS_OPEN
+
+
+def _handle_operator(token, output_stack, operator_stack):
+    assert isinstance(token.value, Operator)
+
+    operator = token.value
+
+    while (
+        operator_stack
+        and not _top_is_open_parenthesis(operator_stack)
+        and _higher_priority(operator_stack[-1].value, operator)
+    ):
+        output_stack.append(operator_stack.pop())
+
+    operator_stack.append(token)
+
+
 def postfix(expression: list[Token]) -> list[Token]:
     output: list[Token] = []
     operators: list[Token] = []
@@ -11,7 +40,7 @@ def postfix(expression: list[Token]) -> list[Token]:
             output.append(token)
 
         elif token.category == Category.PARENTHESIS_CLOSE:
-            while operators and operators[-1].category != Category.PARENTHESIS_OPEN:
+            while operators and not _top_is_open_parenthesis(operators):
                 output.append(operators.pop())
 
             operators.pop()
@@ -19,33 +48,11 @@ def postfix(expression: list[Token]) -> list[Token]:
         elif token.category == Category.PARENTHESIS_OPEN:
             operators.append(token)
 
-        elif (
-            token.category == Category.OPERATOR
-            or token.category == Category.UNARY_OPERATOR
-        ):
-            assert isinstance(token.value, Operator)
-            operator = token.value
-
-            if operators:
-                top = operators[-1]
-                top_operator = top.value
-
-                while (
-                    top.category != Category.PARENTHESIS_OPEN
-                    and top_operator.precedence > operator.precedence
-                    or (
-                        top.category != Category.PARENTHESIS_OPEN
-                        and operator.precedence == top_operator.precedence
-                        and top_operator.associativity == Associativity.LEFT
-                    )
-                ):
-                    output.append(top)
-                    top = operators.pop()
-
-                    if not operators or top.category:
-                        break
-
+        elif token.category in _OPERATORS and not operators:
             operators.append(token)
+
+        elif token.category in _OPERATORS:
+            _handle_operator(token, output, operators)
 
     while operators:
         output.append(operators.pop())
