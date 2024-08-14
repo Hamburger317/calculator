@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Optional, Self
 
-from operators import Operator, OPERATORS, PREFIX_OPERATORS
+from operators import SUFFIX_OPERATORS, Operator, OPERATORS, PREFIX_OPERATORS
 
 
 class Category(Enum):
@@ -10,6 +10,7 @@ class Category(Enum):
     NUMBER = auto()  # i.e "1", "35", "3.14"
     OPERATOR = auto()  # i.e "+", "*", "%"
     PREFIX_OPERATOR = auto()  # i.e negation (-)
+    SUFFIX_OPERATOR = auto()  # i.e percent (%)
     PARENTHESIS_OPEN = auto()  # "("
     PARENTHESIS_CLOSE = auto()  # ")"
 

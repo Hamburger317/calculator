@@ -4,7 +4,9 @@ from lexer import Category, Token
 from operators import Associativity, Operator
 
 
-_OPERATORS = (Category.OPERATOR, Category.PREFIX_OPERATOR)
+_OPERATORS = (Category.OPERATOR,
+              Category.PREFIX_OPERATOR,
+              Category.SUFFIX_OPERATOR)
 
 Stack: TypeAlias = list[Token]
 
