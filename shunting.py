@@ -92,6 +92,11 @@ def _evaluate_prefix(operand: float, operator: Stack) -> float:
 
     elif operator == "-":
         return -operand
+    
+
+def _evaluate_suffix(operand: float, operator: Operator) -> float:
+    if operator == "%":
+        return operand / 100
 
 
 def solve_postfix(postfix_tokens: Stack) -> float:
@@ -117,6 +122,14 @@ def solve_postfix(postfix_tokens: Stack) -> float:
             operand = solve_stack.pop()
 
             result = _evaluate_prefix(operand, token.symbol)
+            solve_stack.append(result)
+
+        elif token.category == Category.SUFFIX_OPERATOR:
+            assert len(solve_stack) >= 1
+
+            operand = solve_stack.pop()
+
+            result = _evaluate_suffix(operand, token.symbol)
             solve_stack.append(result)
 
     return solve_stack[0]
