@@ -22,7 +22,7 @@ OPERATORS: dict[str, Operator] = {
     "^": Operator(Associativity.RIGHT, 3)
 }
 
-UNARY_OPERATORS: dict[str, Operator] = {
+PREFIX_OPERATORS: dict[str, Operator] = {
     "+": Operator(Associativity.RIGHT, 3),
     "-": Operator(Associativity.RIGHT, 3)
 }

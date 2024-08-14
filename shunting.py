@@ -4,7 +4,7 @@ from lexer import Category, Token
 from operators import Associativity, Operator
 
 
-_OPERATORS = (Category.OPERATOR, Category.UNARY_OPERATOR)
+_OPERATORS = (Category.OPERATOR, Category.PREFIX_OPERATOR)
 
 Stack: TypeAlias = list[Token]
 
@@ -84,7 +84,7 @@ def _evaluate(operand: float, other: float, operator: Operator) -> float:
         return operand**other
 
 
-def _evaluate_unary(operand: float, operator: Stack) -> float:
+def _evaluate_prefix(operand: float, operator: Stack) -> float:
     if operator == "+":
         return +operand
 
@@ -109,12 +109,12 @@ def solve_postfix(postfix_tokens: Stack) -> float:
             result = _evaluate(operand, operand2, token.symbol)
             solve_stack.append(result)
 
-        elif token.category == Category.UNARY_OPERATOR:
+        elif token.category == Category.PREFIX_OPERATOR:
             assert len(solve_stack) >= 1
 
             operand = solve_stack.pop()
 
-            result = _evaluate_unary(operand, token.symbol)
+            result = _evaluate_prefix(operand, token.symbol)
             solve_stack.append(result)
 
     return solve_stack[0]

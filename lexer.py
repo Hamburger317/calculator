@@ -1,7 +1,7 @@
 import re
 from typing import Optional
 
-from operators import OPERATORS, UNARY_OPERATORS
+from operators import OPERATORS, PREFIX_OPERATORS
 from tokens import Category, Token
 
 
@@ -41,7 +41,7 @@ def analyze(raw_tokens: list[str]) -> list[Token]:
         elif raw_token == ")":
             token = Token(Category.PARENTHESIS_CLOSE, raw_token)
 
-        elif raw_token in OPERATORS | UNARY_OPERATORS:
+        elif raw_token in OPERATORS | PREFIX_OPERATORS:
             token = Token(Category.OPERATOR, raw_token)
 
         if token is None:
