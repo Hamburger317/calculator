@@ -1,22 +1,22 @@
 from typing import Optional
 
-from operators import UNARY_OPERATORS
+from operators import PREFIX_OPERATORS
 from tokens import Category, Token
 
 
-def _is_unary(previous: Optional[Token], token: Token) -> bool:
+def _is_prefix(previous: Optional[Token], token: Token) -> bool:
     # For cases where an unary operator is at the beginning
     # like "-5 + ..."
     if previous is None:
         return True
 
-    has_unary_operation = token.symbol in UNARY_OPERATORS
-    treated_as_unary: bool = (
+    has_prefix_operation = token.symbol in PREFIX_OPERATORS
+    treated_as_prefix: bool = (
         previous.category != Category.NUMBER
         and previous.category != Category.PARENTHESIS_CLOSE
-    ) or previous.category == Category.UNARY_OPERATOR
+    ) or previous.category == Category.PREFIX_OPERATOR
 
-    return has_unary_operation and treated_as_unary
+    return has_prefix_operation and treated_as_prefix
 
 
 def parse_tokens(tokens: list[Token]) -> list[Token]:
@@ -47,8 +47,8 @@ def parse_tokens(tokens: list[Token]) -> list[Token]:
             parsed_tokens.append(token)
             continue
 
-        if _is_unary(prev_token, token):
-            parsed_tokens.append(Token.from_unary(token))
+        if _is_prefix(prev_token, token):
+            parsed_tokens.append(Token.from_prefix(token))
 
         else:
             parsed_tokens.append(Token.from_operator(token))

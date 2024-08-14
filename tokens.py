@@ -2,14 +2,15 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Optional, Self
 
-from operators import Operator, OPERATORS, UNARY_OPERATORS
+from operators import SUFFIX_OPERATORS, Operator, OPERATORS, PREFIX_OPERATORS
 
 
 class Category(Enum):
     UNKNOWN = auto()
     NUMBER = auto()  # i.e "1", "35", "3.14"
     OPERATOR = auto()  # i.e "+", "*", "%"
-    UNARY_OPERATOR = auto()  # i.e negation (-)
+    PREFIX_OPERATOR = auto()  # i.e negation (-)
+    SUFFIX_OPERATOR = auto()  # i.e percent (%)
     PARENTHESIS_OPEN = auto()  # "("
     PARENTHESIS_CLOSE = auto()  # ")"
 
@@ -35,7 +36,7 @@ class Token:
         return cls(Category.OPERATOR, symbol, OPERATORS[symbol])
 
     @classmethod
-    def from_unary(cls, token: Self) -> Self:
+    def from_prefix(cls, token: Self) -> Self:
         symbol = token.symbol
 
-        return cls(Category.UNARY_OPERATOR, symbol, UNARY_OPERATORS[symbol])
+        return cls(Category.PREFIX_OPERATOR, symbol, PREFIX_OPERATORS[symbol])
