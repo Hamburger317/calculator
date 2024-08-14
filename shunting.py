@@ -60,6 +60,34 @@ def postfix(expression: list[Token]) -> list[Token]:
     return output
 
 
+def _evaluate_operator(operand, other, operator):
+    if operator == "+":
+        return operand + other
+    
+    elif operator == "-":
+        return operand - other
+    
+    elif operator == "*":
+        return operand * other
+    
+    elif operator == "/":
+        return operand / other
+    
+    elif operator == "%":
+        return int(operand) % int(other)
+    
+    elif operator == "^":
+        return operand ** other
+
+
+def _evaluate_unary(operand, operator):
+    if operator == "+":
+        return +operand
+    
+    elif operator == "-":
+        return -operand
+
+
 def solve_postfix(postfix_tokens: list[Token]) -> float:
     solve_stack: list[float] = []
 
@@ -69,59 +97,20 @@ def solve_postfix(postfix_tokens: list[Token]) -> float:
             solve_stack.append(token.value)
 
         elif token.category == Category.OPERATOR:
-            assert isinstance(token.value, Operator)
-            # Operands flipped due to popping.
-            if token.symbol == "+":
-                assert len(solve_stack) >= 2
-                operand1 = solve_stack.pop()
-                operand2 = solve_stack.pop()
+            assert len(solve_stack) >= 2
 
-                solve_stack.append(operand2 + operand1)
+            operand2 = solve_stack.pop()
+            operand = solve_stack.pop()
 
-            elif token.symbol == "-":
-                assert len(solve_stack) >= 2
-                operand1 = solve_stack.pop()
-                operand2 = solve_stack.pop()
-
-                solve_stack.append(operand2 - operand1)
-
-            elif token.symbol == "*":
-                assert len(solve_stack) >= 2
-                operand1 = solve_stack.pop()
-                operand2 = solve_stack.pop()
-
-                solve_stack.append(operand2 * operand1)
-
-            elif token.symbol == "/":
-                assert len(solve_stack) >= 2
-                operand1 = solve_stack.pop()
-                operand2 = solve_stack.pop()
-
-                solve_stack.append(operand2 / operand1)
-
-            elif token.symbol == "%":
-                assert len(solve_stack) >= 2
-                operand1 = int(solve_stack.pop())
-                operand2 = int(solve_stack.pop())
-
-                solve_stack.append(operand2 % operand1)
-
-            elif token.symbol == "^":
-                assert len(solve_stack) >= 2
-                operand1 = solve_stack.pop()
-                operand2 = solve_stack.pop()
-
-                solve_stack.append(operand2**operand1)
+            result = _evaluate_operator(operand, operand2, token.symbol)
+            solve_stack.append(result)
 
         elif token.category == Category.UNARY_OPERATOR:
-            if token.symbol == "-":
-                operand = solve_stack.pop()
+            assert len(solve_stack) >= 1
 
-                solve_stack.append(-operand)
+            operand = solve_stack.pop()
 
-            elif token.symbol == "+":
-                operand = solve_stack.pop()
+            result = _evaluate_unary(operand, token.symbol)
+            solve_stack.append(result)
 
-                solve_stack.append(+operand)
-
-    return float(solve_stack[0])
+    return solve_stack[0]
