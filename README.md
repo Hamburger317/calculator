@@ -20,7 +20,7 @@ Alternatively, use the `evaluate` function from the `evaluate` module.
 ```py
 import evaluate
 
-print(evaluate("10 - 2"))  # prints "8.0"
+print(evaluate.evaluate("10 - 2"))  # prints "8.0"
 
 ```
 
