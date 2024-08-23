@@ -1,8 +1,10 @@
 from typing import Optional
 
-from operators import PREFIX_OPERATORS
+from operators import PREFIX_OPERATORS, SUFFIX_OPERATORS
 from tokens import Category, Token
 
+def _iterate_with_next(iterable: list[Token]):
+    return zip(iterable, iterable[1:] + [None])
 
 def _is_prefix(previous: Optional[Token], token: Token) -> bool:
     # For cases where an unary operator is at the beginning
@@ -14,10 +16,29 @@ def _is_prefix(previous: Optional[Token], token: Token) -> bool:
     treated_as_prefix: bool = (
         previous.category != Category.NUMBER
         and previous.category != Category.PARENTHESIS_CLOSE
+        and previous.category != Category.SUFFIX_OPERATOR
     ) or previous.category == Category.PREFIX_OPERATOR
 
     return has_prefix_operation and treated_as_prefix
 
+def _is_suffix(previous: Optional[Token], token: Token, next_: Optional[Token]):
+
+    # It's an unimplemented prefix operator.
+    # Here's where we'll raise an error.
+    if previous is None:
+        return False
+    
+    if next_ is None:
+        return True
+
+    has_suffix_operation = token.symbol in SUFFIX_OPERATORS
+    treated_as_suffix = (
+        previous.category == Category.NUMBER
+        and next_.category != Category.NUMBER
+        and next_.category != Category.PARENTHESIS_OPEN
+    ) 
+
+    return has_suffix_operation and treated_as_suffix
 
 def parse_tokens(tokens: list[Token]) -> list[Token]:
     """Reconstructs a series of tokens (lexemes) using a simple AST.
@@ -31,26 +52,26 @@ def parse_tokens(tokens: list[Token]) -> list[Token]:
 
     parsed_tokens: list[Token] = []
 
-    # Pad tokens, so that unary operators can be handled if they are at
-    # the front or the back of an expression.
-    # i.e "-3 + 2" or "5 * 15%".
-    tokens: list[Optional[Token]] = [None, *tokens, None]
-
-    for prev_token, token, next_token in zip(tokens, tokens[1:], tokens[2:]):
-        # Type checkers consider the entire list to be of type
-        # `Token | None` when in practice only `prev_token` and
-        # `next_token` could possibly be None.
-        assert token is not None
+    previous_token = None
+    for token, next_token in _iterate_with_next(tokens):
+        cooked_token = None
 
         if token.category != Category.OPERATOR:
-            # No use reconstructing Token.
-            parsed_tokens.append(token)
-            continue
+            cooked_token = token
+            
+        elif _is_prefix(previous_token, token):
+            cooked_token = Token.from_prefix(token)
 
-        if _is_prefix(prev_token, token):
-            parsed_tokens.append(Token.from_prefix(token))
+        elif _is_suffix(previous_token, token, next_token):
+            cooked_token = Token.from_suffix(token)
 
+        elif token.category == Category.OPERATOR:
+            cooked_token = Token.from_operator(token)
+        
         else:
-            parsed_tokens.append(Token.from_operator(token))
+            raise ValueError("unknown token.")
+        
+        parsed_tokens.append(cooked_token)
+        previous_token = cooked_token
 
     return parsed_tokens
