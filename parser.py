@@ -36,7 +36,7 @@ def _is_suffix(previous: Optional[Token], token: Token, next_: Optional[Token]):
         previous.category == Category.NUMBER
         and next_.category != Category.NUMBER
         and next_.category != Category.PARENTHESIS_OPEN
-    ) 
+    ) or next_.category == Category.OPERATOR
 
     return has_suffix_operation and treated_as_suffix
 
