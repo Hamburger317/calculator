@@ -27,6 +27,10 @@ def _handle_operator(token: Token, output: Stack, operator_stack: Stack):
 
     operator = token.value
 
+    if token.category == Category.SUFFIX_OPERATOR:
+        output.append(token)
+        return
+
     while (
         operator_stack
         and not _top_is_open_parenthesis(operator_stack)
@@ -52,9 +56,6 @@ def postfix(expression: Stack) -> Stack:
             operators.pop()
 
         elif token.category == Category.PARENTHESIS_OPEN:
-            operators.append(token)
-
-        elif token.category in _OPERATORS and not operators:
             operators.append(token)
 
         elif token.category in _OPERATORS:
