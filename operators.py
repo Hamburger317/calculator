@@ -28,5 +28,6 @@ PREFIX_OPERATORS: dict[str, Operator] = {
 }
 
 SUFFIX_OPERATORS: dict[str, Operator] = {
-    "%": Operator(Associativity.LEFT, 3)
+    "%": Operator(Associativity.LEFT, 3),
+    "!": Operator(Associativity.LEFT, 3),
 }
