@@ -1,4 +1,3 @@
-import math
 from typing import TypeAlias
 
 from lexer import Category, Token
@@ -99,12 +98,6 @@ def _evaluate_prefix(operand: float, operator: Stack) -> float:
 def _evaluate_suffix(operand: float, operator: Operator) -> float:
     if operator == "%":
         return operand / 100
-
-    elif operator == "!":
-        # math.factorial only takes in integers, since we're working
-        # with floats, we instead find the Gamma function of the
-        # operand after we shift it by one.
-        return math.gamma(operand + 1)
 
 
 def solve_postfix(postfix_tokens: Stack) -> float:
