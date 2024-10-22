@@ -27,6 +27,10 @@ def _handle_operator(token: Token, output: Stack, operator_stack: Stack):
 
     operator = token.value
 
+    if token.category == Category.SUFFIX_OPERATOR:
+        output.append(token)
+        return
+
     while (
         operator_stack
         and not _top_is_open_parenthesis(operator_stack)
@@ -54,9 +58,6 @@ def postfix(expression: Stack) -> Stack:
         elif token.category == Category.PARENTHESIS_OPEN:
             operators.append(token)
 
-        elif token.category in _OPERATORS and not operators:
-            operators.append(token)
-
         elif token.category in _OPERATORS:
             _handle_operator(token, output, operators)
 
@@ -80,7 +81,7 @@ def _evaluate(operand: float, other: float, operator: Operator) -> float:
         return operand / other
 
     elif operator == "%":
-        return int(operand) % int(other)
+        return operand % other
 
     elif operator == "^":
         return operand**other
@@ -92,6 +93,11 @@ def _evaluate_prefix(operand: float, operator: Stack) -> float:
 
     elif operator == "-":
         return -operand
+    
+
+def _evaluate_suffix(operand: float, operator: Operator) -> float:
+    if operator == "%":
+        return operand / 100
 
 
 def solve_postfix(postfix_tokens: Stack) -> float:
@@ -117,6 +123,14 @@ def solve_postfix(postfix_tokens: Stack) -> float:
             operand = solve_stack.pop()
 
             result = _evaluate_prefix(operand, token.symbol)
+            solve_stack.append(result)
+
+        elif token.category == Category.SUFFIX_OPERATOR:
+            assert len(solve_stack) >= 1
+
+            operand = solve_stack.pop()
+
+            result = _evaluate_suffix(operand, token.symbol)
             solve_stack.append(result)
 
     return solve_stack[0]

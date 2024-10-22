@@ -27,4 +27,6 @@ PREFIX_OPERATORS: dict[str, Operator] = {
     "-": Operator(Associativity.RIGHT, 3)
 }
 
-SUFFIX_OPERATORS: dict[str, Operator] = {}
+SUFFIX_OPERATORS: dict[str, Operator] = {
+    "%": Operator(Associativity.LEFT, 3)
+}

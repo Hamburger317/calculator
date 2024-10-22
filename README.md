@@ -26,18 +26,19 @@ print(evaluate.evaluate("10 - 2"))  # prints "8.0"
 
 ## Operator Table
 
-| Operation | Description                                                                      | Example | Result | Precedence | Associativity |
-|-----------|----------------------------------------------------------------------------------|---------|--------|------------|---------------|
-| (         | Left parenthesis. Used for grouping expressions.                                 | N/A     | N/A    | N/A        | N/A           |
-| )         | Right parenthesis. Used for grouping expressions.                                | N/A     | N/A    | N/A        | N/A           |
-| + (unary) | Evaluates its operand to itself.                                                 | +10     | 10     | 3          | Right to Left |
-| - (unary) | Negation. Negates its operand. Used for negative numbers.                        | -10     | -10    | 3          | Right to Left |
-| ^         | Exponent. Raises its left operand to the power of its right operand.             | 2^4     | 16     | 3          | Right to Left |
-| %         | Modulo. Converts its 2 operands to integers, and returns the remainder of the 2. | 8 % 3   | 2      | 2          | Left to Right |
-| /         | Division. Divides its 2 operands.                                                | 5 / 2   | 2.5    | 2          | Left to Right |
-| *         | Multiplication. Multiplies its 2 operands.                                       | 6 * 2   | 12     | 2          | Left to Right |
-| -         | Subtraction. Subtracts its 2 operands.                                           | 12 - 10 | 2      | 1          | Left to Right |
-| +         | Addition. Adds its 2 operands.                                                   | 2 + 2   | 4      | 1          | Left to Right |
+| Operation   | Description                                                                                                             | Example | Result | Precedence | Associativity |
+|-------------|-------------------------------------------------------------------------------------------------------------------------|---------|--------|------------|---------------|
+| (           | Left parenthesis. Used for grouping expressions.                                                                        | N/A     | N/A    | N/A        | N/A           |
+| )           | Right parenthesis. Used for grouping expressions.                                                                       | N/A     | N/A    | N/A        | N/A           |
+| % (percent) | Percentage operator. Simply divides a value by 100.                                                                     | 5%      | 0.05   | 3          | Left to Right |
+| + (unary)   | Evaluates its operand to itself.                                                                                        | +10     | 10     | 3          | Right to Left |
+| - (unary)   | Negation. Negates its operand. Used for negative numbers.                                                               | -10     | -10    | 3          | Right to Left |
+| ^           | Exponent. Raises its left operand to the power of its right operand.                                                    | 2^4     | 16     | 3          | Right to Left |
+| % (modulo)  | Modulo. Converts its 2 operands to integers, and returns the remainder of the 2. Overloaded by the percentage operator. | 8 % 3   | 2      | 2          | Left to Right |
+| /           | Division. Divides its 2 operands.                                                                                       | 5 / 2   | 2.5    | 2          | Left to Right |
+| *           | Multiplication. Multiplies its 2 operands.                                                                              | 6 * 2   | 12     | 2          | Left to Right |
+| -           | Subtraction. Subtracts its 2 operands.                                                                                  | 12 - 10 | 2      | 1          | Left to Right |
+| +           | Addition. Adds its 2 operands.                                                                                          | 2 + 2   | 4      | 1          | Left to Right |
 
 ## Credits
 

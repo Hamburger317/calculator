@@ -40,3 +40,9 @@ class Token:
         symbol = token.symbol
 
         return cls(Category.PREFIX_OPERATOR, symbol, PREFIX_OPERATORS[symbol])
+    
+    @classmethod
+    def from_suffix(cls, token: Self) -> Self:
+        symbol = token.symbol
+
+        return cls(Category.SUFFIX_OPERATOR, symbol, SUFFIX_OPERATORS[symbol])
