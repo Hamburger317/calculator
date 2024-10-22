@@ -31,6 +31,7 @@ print(evaluate.evaluate("10 - 2"))  # prints "8.0"
 | (           | Left parenthesis. Used for grouping expressions.                                                                        | N/A     | N/A    | N/A        | N/A           |
 | )           | Right parenthesis. Used for grouping expressions.                                                                       | N/A     | N/A    | N/A        | N/A           |
 | % (percent) | Percentage operator. Simply divides a value by 100.                                                                     | 5%      | 0.05   | 3          | Left to Right |
+| !           | Factorial operator. Calculates the factorial of its operand.                                                            | 6!      | 720    | 3          | Left to Right |
 | + (unary)   | Evaluates its operand to itself.                                                                                        | +10     | 10     | 3          | Right to Left |
 | - (unary)   | Negation. Negates its operand. Used for negative numbers.                                                               | -10     | -10    | 3          | Right to Left |
 | ^           | Exponent. Raises its left operand to the power of its right operand.                                                    | 2^4     | 16     | 3          | Right to Left |

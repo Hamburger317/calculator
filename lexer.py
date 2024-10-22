@@ -21,7 +21,7 @@ def _is_float_like(s: str) -> bool:
 
 def tokenize(expression: str) -> list[str]:
     expression = re.sub(r"\s+", "", expression)
-    raw_tokens = re.split(r"(\+|\-|\*|/|%|\^|\(|\))", expression)
+    raw_tokens = re.split(r"(\+|\-|\*|/|%|\^|\(|\)|!)", expression)
 
     return [raw_token for raw_token in raw_tokens if raw_token]
 
