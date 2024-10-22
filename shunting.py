@@ -81,7 +81,7 @@ def _evaluate(operand: float, other: float, operator: Operator) -> float:
         return operand / other
 
     elif operator == "%":
-        return int(operand) % int(other)
+        return operand % other
 
     elif operator == "^":
         return operand**other
